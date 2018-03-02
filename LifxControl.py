@@ -7,6 +7,7 @@
 import sys
 import requests
 import authorisation
+import time
 
 WHITE = "white"
 RED = "red"
@@ -51,11 +52,22 @@ def setColour(colour):
 
 
 def setBrightness(brightness):
+    print "Brightness = " + str(brightness)
     payload = {
         "brightness" : brightness,
     }
 
     response = requests.put('https://api.lifx.com/v1/lights/all/state', data=payload, headers=headers)
+
+
+def breath():
+    payload = {
+        "period": 2,
+        "cycles": 5,
+        "color": "green",
+    }
+
+    response = requests.post('https://api.lifx.com/v1/lights/all/effects/breathe', data=payload, headers=headers)
 
 
 def main(argv):
@@ -71,13 +83,18 @@ def main(argv):
 
     setColour(BLUE)
 
-    #setBrightness(1.0)
+    breath()
 
-    #setBrightness(1.0)
 
-    setBrightness(0.1)
+    #setBrightness(0.0)
 
-    #switchOff()
+    switchOn()
+    for b in range(1, 10):
+        c = float(b/10.0)
+        setBrightness(c)
+        time.sleep(1)
+        print c
+
 
 
 ################################################################################
